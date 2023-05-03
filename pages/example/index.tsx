@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { Doughnut, Line } from 'react-chartjs-2'
+import React, { useState, useEffect } from "react";
+import { Doughnut, Line } from "react-chartjs-2";
 
-import CTA from 'example/components/CTA'
-import InfoCard from 'example/components/Cards/InfoCard'
-import ChartCard from 'example/components/Chart/ChartCard'
-import ChartLegend from 'example/components/Chart/ChartLegend'
-import PageTitle from 'example/components/Typography/PageTitle'
-import RoundIcon from 'example/components/RoundIcon'
-import Layout from 'example/containers/Layout'
-import response, { ITableData } from 'utils/demo/tableData'
-import { ChatIcon, CartIcon, MoneyIcon, PeopleIcon } from 'icons'
+import CTA from "example/components/CTA";
+import InfoCard from "example/components/Cards/InfoCard";
+import ChartCard from "example/components/Chart/ChartCard";
+import ChartLegend from "example/components/Chart/ChartLegend";
+import PageTitle from "example/components/Typography/PageTitle";
+import RoundIcon from "example/components/RoundIcon";
+import Layout from "example/containers/Layout";
+import response, { ITableData } from "utils/demo/tableData";
+import { ChatIcon, CartIcon, MoneyIcon, PeopleIcon } from "icons";
 
 import {
   TableBody,
@@ -22,14 +22,14 @@ import {
   Avatar,
   Badge,
   Pagination,
-} from '@roketid/windmill-react-ui'
+} from "@roketid/windmill-react-ui";
 
 import {
   doughnutOptions,
   lineOptions,
   doughnutLegends,
   lineLegends,
-} from 'utils/demo/chartsData'
+} from "utils/demo/chartsData";
 
 import {
   Chart,
@@ -41,7 +41,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js'
+} from "chart.js";
 
 function Dashboard() {
   Chart.register(
@@ -53,142 +53,112 @@ function Dashboard() {
     Title,
     Tooltip,
     Legend
-  )
+  );
 
-  const [page, setPage] = useState(1)
-  const [data, setData] = useState<ITableData[]>([])
+  const [page, setPage] = useState(1);
+  const [data, setData] = useState<ITableData[]>([]);
 
   // pagination setup
-  const resultsPerPage = 10
-  const totalResults = response.length
+  const resultsPerPage = 10;
+  const totalResults = response.length;
 
   // pagination change control
   function onPageChange(p: number) {
-    setPage(p)
+    setPage(p);
   }
 
   // on page change, load new sliced data
   // here you would make another server request for new data
   useEffect(() => {
-    setData(response.slice((page - 1) * resultsPerPage, page * resultsPerPage))
-  }, [page])
+    setData(response.slice((page - 1) * resultsPerPage, page * resultsPerPage));
+  }, [page]);
 
   return (
     <Layout>
-      <PageTitle>Dashboard</PageTitle>
+      <link
+        rel="stylesheet"
+        href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css"
+      />
+      <link
+        rel="stylesheet"
+        href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
+      />
 
-      <CTA />
-
-      {/* <!-- Cards --> */}
-      <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
-        <InfoCard title="Total clients" value="6389">
-          {/* @ts-ignore */}
-          <RoundIcon
-            icon={PeopleIcon}
-            iconColorClass="text-orange-500 dark:text-orange-100"
-            bgColorClass="bg-orange-100 dark:bg-orange-500"
-            className="mr-4"
-          />
-        </InfoCard>
-
-        <InfoCard title="Account balance" value="$ 46,760.89">
-          {/* @ts-ignore */}
-          <RoundIcon
-            icon={MoneyIcon}
-            iconColorClass="text-green-500 dark:text-green-100"
-            bgColorClass="bg-green-100 dark:bg-green-500"
-            className="mr-4"
-          />
-        </InfoCard>
-
-        <InfoCard title="New sales" value="376">
-          {/* @ts-ignore */}
-          <RoundIcon
-            icon={CartIcon}
-            iconColorClass="text-blue-500 dark:text-blue-100"
-            bgColorClass="bg-blue-100 dark:bg-blue-500"
-            className="mr-4"
-          />
-        </InfoCard>
-
-        <InfoCard title="Pending contacts" value="35">
-          {/* @ts-ignore */}
-          <RoundIcon
-            icon={ChatIcon}
-            iconColorClass="text-teal-500 dark:text-teal-100"
-            bgColorClass="bg-teal-100 dark:bg-teal-500"
-            className="mr-4"
-          />
-        </InfoCard>
-      </div>
-
-      <TableContainer>
-        <Table>
-          <TableHeader>
-            <tr>
-              <TableCell>Client</TableCell>
-              <TableCell>Amount</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Date</TableCell>
-            </tr>
-          </TableHeader>
-          <TableBody>
-            {data.map((user, i) => (
-              <TableRow key={i}>
-                <TableCell>
-                  <div className="flex items-center text-sm">
-                    <Avatar
-                      className="hidden mr-3 md:block"
-                      src={user.avatar}
-                      alt="User image"
-                    />
-                    <div>
-                      <p className="font-semibold">{user.name}</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
-                        {user.job}
-                      </p>
+      <main className="profile-page">
+        <section className="relative block h-500-px">
+          <div className="absolute top-0 w-full h-full bg-center bg-cover">
+            <span
+              id="blackOverlay"
+              className="w-full h-full absolute opacity-50 bg-black"
+            ></span>
+          </div>
+          <div className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px transform translate-z-0">
+            <svg
+              className="absolute bottom-0 overflow-hidden"
+              xmlns="http://www.w3.org/2000/svg"
+              preserveAspectRatio="none"
+              version="1.1"
+              viewBox="0 0 2560 100"
+              x="0"
+              y="0"
+            >
+              <polygon
+                className="text-blueGray-200 fill-current"
+                points="2560 0 2560 100 0 100"
+              ></polygon>
+            </svg>
+          </div>
+        </section>
+        <section className="relative py-16 bg-blueGray-200">
+          <div className="container mx-auto px-4">
+            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+              <div className="px-6">
+                <div className="flex flex-wrap justify-center">
+                  <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
+                    <div className="relative">
+                      <img
+                        alt="..."
+                        src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
+                        className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
+                      />
                     </div>
                   </div>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">$ {user.amount}</span>
-                </TableCell>
-                <TableCell>
-                  <Badge type={user.status}>{user.status}</Badge>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">
-                    {new Date(user.date).toLocaleDateString()}
-                  </span>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <TableFooter>
-          <Pagination
-            totalResults={totalResults}
-            resultsPerPage={resultsPerPage}
-            label="Table navigation"
-            onChange={onPageChange}
-          />
-        </TableFooter>
-      </TableContainer>
-
-      <PageTitle>Charts</PageTitle>
-      <div className="grid gap-6 mb-8 md:grid-cols-2">
-        <ChartCard title="Revenue">
-          <Doughnut {...doughnutOptions} />
-          <ChartLegend legends={doughnutLegends} />
-        </ChartCard>
-
-        <ChartCard title="Traffic">
-          <Line {...lineOptions} />
-          <ChartLegend legends={lineLegends} />
-        </ChartCard>
-      </div>
+                  <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
+                    <div className="py-6 px-3 mt-32 sm:mt-0">
+                      <button
+                        className="bg-[#015A02] uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
+                        type="button"
+                      >
+                        Засах
+                      </button>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-4/12 px-4 lg:order-1"></div>
+                </div>
+                <div className="text-center mt-12">
+                  <div className="mb-2 text-blueGray-600">
+                    Овог: Эрдэнэцацрал
+                  </div>
+                  <div className="mb-2 text-blueGray-600">Нэр: Дашням</div>
+                  <div className="mb-2 text-blueGray-600">Цол: Ахлагч</div>
+                  <div className="mb-2 text-blueGray-600">
+                    Цэргийн анги: Хэлийн застав
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <footer className="relative bg-blueGray-200 pt-8 pb-6 mt-8">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-wrap items-center md:justify-between justify-center">
+                <div className="w-full md:w-6/12 px-4 mx-auto text-center"></div>
+              </div>
+            </div>
+          </footer>
+        </section>
+      </main>
     </Layout>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;

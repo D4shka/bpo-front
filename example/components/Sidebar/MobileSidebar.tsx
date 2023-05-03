@@ -1,16 +1,16 @@
-import React, { useContext, useRef } from 'react'
-import { Transition, Backdrop } from '@roketid/windmill-react-ui'
-import SidebarContext from 'context/SidebarContext'
-import SidebarContent from './SidebarContent'
-
+import React, { useContext, useRef } from "react";
+import { Transition, Backdrop } from "@roketid/windmill-react-ui";
+import SidebarContext from "context/SidebarContext";
+import SidebarContent from "./SidebarContent";
 
 function MobileSidebar() {
-  const sidebarRef = useRef(null)
-  const { isSidebarOpen, closeSidebar, saveScroll } = useContext(SidebarContext)
+  const sidebarRef = useRef(null);
+  const { isSidebarOpen, closeSidebar, saveScroll } =
+    useContext(SidebarContext);
 
   const linkClickedHandler = () => {
-    saveScroll(sidebarRef.current)
-  }
+    saveScroll(sidebarRef.current);
+  };
 
   return (
     <Transition show={isSidebarOpen}>
@@ -37,14 +37,14 @@ function MobileSidebar() {
           <aside
             id="mobileSidebar"
             ref={sidebarRef}
-            className="fixed inset-y-0 z-50 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-white dark:bg-gray-800 lg:hidden"
+            className="fixed inset-y-0 z-50 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-white lg:hidden"
           >
             <SidebarContent linkClicked={linkClickedHandler} />
           </aside>
         </Transition>
       </>
     </Transition>
-  )
+  );
 }
 
-export default MobileSidebar
+export default MobileSidebar;

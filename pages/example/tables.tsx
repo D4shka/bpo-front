@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 
-import PageTitle from 'example/components/Typography/PageTitle'
-import SectionTitle from 'example/components/Typography/SectionTitle'
-import CTA from 'example/components/CTA'
+import PageTitle from "example/components/Typography/PageTitle";
+import SectionTitle from "example/components/Typography/SectionTitle";
+import { useRouter } from "next/router";
+import Loader from "example/components/Loader/Loader";
 import {
   Table,
   TableHeader,
@@ -15,167 +16,248 @@ import {
   Avatar,
   Button,
   Pagination,
-} from '@roketid/windmill-react-ui'
-import { EditIcon, TrashIcon } from 'icons'
+} from "@roketid/windmill-react-ui";
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@roketid/windmill-react-ui";
+import { EditIcon, TrashIcon } from "icons";
 
-import response, { ITableData } from 'utils/demo/tableData'
-import Layout from 'example/containers/Layout'
-// make a copy of the data, for the second table
-const response2 = response.concat([])
+import Layout from "example/containers/Layout";
+
+interface MyResponse extends Response {
+  accessToken?: string;
+}
+
+interface ITableData {
+  image: string;
+  firstname: string;
+  lastname: string;
+  id: number;
+  rank: {
+    id: number;
+    name: string;
+  };
+  roles: string;
+  branches: [
+    {
+      id: number;
+      name: string;
+    }
+  ];
+}
+interface Id {
+  id: number;
+}
 
 function Tables() {
-  /**
-   * DISCLAIMER: This code could be badly improved, but for the sake of the example
-   * and readability, all the logic for both table are here.
-   * You would be better served by dividing each table in its own
-   * component, like Table(?) and TableWithActions(?) hiding the
-   * presentation details away from the page view.
-   */
+  const [users, setUsers] = useState<ITableData[]>([]);
+  const [totalElements, setTotalElements] = useState(0);
+  const [page, setPage] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [id, setId] = useState<any>([]);
 
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1)
-  const [pageTable2, setPageTable2] = useState(1)
+  const router = useRouter();
 
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState<ITableData[]>([])
-  const [dataTable2, setDataTable2] = useState<ITableData[]>([])
+  const getUsers = async () => {
+    const response = await fetch(
+      `http://192.168.1.135:8080/api/users?page=${page}&size=${10}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    const data = await response.json();
+    setTotalElements(data.totalElements);
+    setUsers(data.content);
+  };
 
-  // pagination setup
-  const resultsPerPage = 10
-  const totalResults = response.length
+  console.log("users", users);
 
-  // pagination change control
-  function onPageChangeTable1(p: number) {
-    setPageTable1(p)
+  const Delete = async (id: number) => {
+    console.log("sdsd");
+    try {
+      fetch(`http://192.168.1.135:8080/api/users/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }).then((res) => {
+        // const myRes = res as MyResponse;
+        // if (myRes.status === 204) {
+        //   myRes.json().then((d) => {
+        //     console.log("d", d);
+        //   });
+        // }
+        console.log(res);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const Edit = (user: ITableData) => {
+    router.push("/example/modals");
+    localStorage.setItem("user", JSON.stringify(user));
+  };
+
+  function openModal() {
+    setIsModalOpen(true);
   }
 
-  // pagination change control
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
   function onPageChangeTable2(p: number) {
-    setPageTable2(p)
+    setPage(p - 1);
   }
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
   useEffect(() => {
-    setDataTable1(response.slice((pageTable1 - 1) * resultsPerPage, pageTable1 * resultsPerPage))
-  }, [pageTable1])
-
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  useEffect(() => {
-    setDataTable2(response2.slice((pageTable2 - 1) * resultsPerPage, pageTable2 * resultsPerPage))
-  }, [pageTable2])
+    getUsers();
+  }, [page]);
 
   return (
     <Layout>
-      <PageTitle>Tables</PageTitle>
+      {/* <Loader /> */}
+      {users.map((user, i) => (
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <ModalHeader>Хувийн мэдээлэл</ModalHeader>
+          <ModalBody>
+            <div className="max-w-md p-8 sm:flex sm:space-x-6">
+              <div className="flex-shrink-0 w-full mb-6 h-44 sm:h-32 sm:w-32 sm:mb-0">
+                <img
+                  src="https://source.unsplash.com/100x100/?portrait?1"
+                  alt=""
+                  className="object-cover object-center w-full h-full rounded"
+                />
+              </div>
+              <div className="flex flex-col space-y-4">
+                <div>
+                  <span className="flex items-center space-x-2">
+                    <span className="">Овог: {user.firstname}</span>
+                  </span>
+                  <span className="flex items-center space-x-2">
+                    <span className="">Нэр: {user.lastname}</span>
+                  </span>
+                </div>
+                <div className="space-y-1">
+                  <span className="flex items-center space-x-2">
+                    <span className="">
+                      Цэргийн анги: {user?.branches[0]?.name}
+                    </span>
+                  </span>
+                  <span className="flex items-center space-x-2">
+                    <span className="">Цол: {user?.rank?.name}</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <div className="hidden sm:block">
+              <Button layout="outline" onClick={closeModal}>
+                Cancel
+              </Button>
+            </div>
+            <div className="hidden sm:block">
+              <Button>Accept</Button>
+            </div>
+            <div className="block w-full sm:hidden">
+              <Button block size="large" layout="outline" onClick={closeModal}>
+                Cancel
+              </Button>
+            </div>
+            <div className="block w-full sm:hidden">
+              <Button block size="large">
+                Accept
+              </Button>
+            </div>
+          </ModalFooter>
+        </Modal>
+      ))}
 
-      <CTA />
-
-      <SectionTitle>Simple table</SectionTitle>
-      <TableContainer className="mb-8">
-        <Table>
-          <TableHeader>
-            <tr>
-              <TableCell>Client</TableCell>
-              <TableCell>Amount</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Date</TableCell>
-            </tr>
-          </TableHeader>
-          <TableBody>
-            {dataTable1.map((user, i) => (
-              <TableRow key={i}>
-                <TableCell>
-                  <div className="flex items-center text-sm">
-                    <Avatar className="hidden mr-3 md:block" src={user.avatar} alt="User avatar" />
-                    <div>
-                      <p className="font-semibold">{user.name}</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">{user.job}</p>
+      <SectionTitle>Жагсаалт</SectionTitle>
+      {users != null && (
+        <TableContainer className="mb-8">
+          <Table>
+            <TableHeader>
+              <tr>
+                <TableCell>Хэрэглэгч</TableCell>
+                <TableCell>Цэргийн анги</TableCell>
+                <TableCell>Цол</TableCell>
+                <TableCell>Засварлах</TableCell>
+              </tr>
+            </TableHeader>
+            <TableBody>
+              {users.map((user, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <div className="flex items-center text-sm">
+                      <Avatar
+                        className="hidden mr-3 md:block"
+                        src={user.image}
+                        alt="User avatar"
+                        onClick={openModal}
+                      />
+                      <div>
+                        <p className="font-semibold">{user.firstname}</p>
+                        <p className="text-xs text-gray-600">{user.lastname}</p>
+                      </div>
                     </div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">$ {user.amount}</span>
-                </TableCell>
-                <TableCell>
-                  <Badge type={user.status}>{user.status}</Badge>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">{new Date(user.date).toLocaleDateString()}</span>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <TableFooter>
-          <Pagination
-            totalResults={totalResults}
-            resultsPerPage={resultsPerPage}
-            onChange={onPageChangeTable1}
-            label="Table navigation"
-          />
-        </TableFooter>
-      </TableContainer>
-
-      <SectionTitle>Table with actions</SectionTitle>
-      <TableContainer className="mb-8">
-        <Table>
-          <TableHeader>
-            <tr>
-              <TableCell>Client</TableCell>
-              <TableCell>Amount</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Actions</TableCell>
-            </tr>
-          </TableHeader>
-          <TableBody>
-            {dataTable2.map((user, i) => (
-              <TableRow key={i}>
-                <TableCell>
-                  <div className="flex items-center text-sm">
-                    <Avatar className="hidden mr-3 md:block" src={user.avatar} alt="User avatar" />
-                    <div>
-                      <p className="font-semibold">{user.name}</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">{user.job}</p>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">{user?.branches[0]?.name}</span>
+                  </TableCell>
+                  <TableCell>
+                    <Badge>{user?.rank?.name}</Badge>
+                  </TableCell>
+                  {/* <TableCell>
+                  <span className="text-sm">
+                    {new Date(user.createdDate).toLocaleDateString()}
+                  </span>
+                </TableCell> */}
+                  <TableCell>
+                    <div className="flex items-center space-x-4">
+                      <Button
+                        layout="link"
+                        size="small"
+                        aria-label="Edit"
+                        onClick={(event) => Edit(user)}
+                      >
+                        <EditIcon className="w-5 h-5" aria-hidden="true" />
+                      </Button>
+                      <Button
+                        layout="link"
+                        size="small"
+                        aria-label="Delete"
+                        onClick={(event) => Delete(user.id)}
+                      >
+                        <TrashIcon className="w-5 h-5" aria-hidden="true" />
+                      </Button>
                     </div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">$ {user.amount}</span>
-                </TableCell>
-                <TableCell>
-                  <Badge type={user.status}>{user.status}</Badge>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">{new Date(user.date).toLocaleDateString()}</span>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center space-x-4">
-                    <Button layout="link" size="small" aria-label="Edit">
-                      <EditIcon className="w-5 h-5" aria-hidden="true" />
-                    </Button>
-                    <Button layout="link" size="small" aria-label="Delete">
-                      <TrashIcon className="w-5 h-5" aria-hidden="true" />
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <TableFooter>
-          <Pagination
-            totalResults={totalResults}
-            resultsPerPage={resultsPerPage}
-            onChange={onPageChangeTable2}
-            label="Table navigation"
-          />
-        </TableFooter>
-      </TableContainer>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <TableFooter>
+            <Pagination
+              totalResults={totalElements}
+              resultsPerPage={10}
+              onChange={(e) => onPageChangeTable2(e)}
+              label="Table navigation"
+            />
+          </TableFooter>
+        </TableContainer>
+      )}
     </Layout>
-  )
+  );
 }
 
-export default Tables
+export default Tables;
