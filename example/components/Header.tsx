@@ -1,6 +1,12 @@
 import { useContext, useState } from "react";
 import SidebarContext from "context/SidebarContext";
 import {
+  HelperText,
+  Label,
+  Select,
+  Textarea,
+} from "@roketid/windmill-react-ui";
+import {
   SearchIcon,
   MoonIcon,
   SunIcon,
@@ -20,6 +26,17 @@ import {
 } from "@roketid/windmill-react-ui";
 
 import { useRouter } from "next/router";
+import defaultAvatar from "../../public/assets/img/defaultAvatar.jpg";
+
+interface RankOption {
+  id: number;
+  name: string;
+}
+
+interface BranchesOption {
+  id: number;
+  name: string;
+}
 
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext);
@@ -27,11 +44,38 @@ function Header() {
 
   const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [rank, setRank] = useState(0);
+  const [branches, setBranches] = useState(0);
 
   const router = useRouter();
 
+  const rankOptions: RankOption[] = [
+    { id: 1, name: "Байлдагч" },
+    { id: 2, name: "Ахлах байлдагч" },
+    { id: 3, name: "Дэд түрүүч" },
+    { id: 4, name: "Түрүүч" },
+    { id: 5, name: "Ахлах түрүүч" },
+    { id: 6, name: "Дэд ахлагч" },
+    { id: 7, name: "Ахлагч" },
+    { id: 8, name: "Ахмад" },
+    { id: 9, name: "Ахлах ахлагч" },
+    { id: 10, name: "Дэслэгч" },
+    { id: 11, name: "Ахлах дэслэгч" },
+    { id: 12, name: "Ахмад" },
+    { id: 13, name: "Хошууч" },
+    { id: 14, name: "Дэд хурандаа" },
+    { id: 15, name: "Хурандаа" },
+  ];
+
+  const branchesOption: BranchesOption[] = [
+    { id: 1, name: "Хилийн застав" },
+    { id: 2, name: "Option 2" },
+    { id: 3, name: "Option 3" },
+    { id: 4, name: "Option 4" },
+  ];
+
   const Profile = () => {
-    router.push("/example");
+    router.push("/example/buttons");
   };
 
   const logout = () => {
@@ -72,6 +116,36 @@ function Header() {
               placeholder="Хайх"
               aria-label="Search"
             />
+
+            <Label className="">
+              <Select
+                className="mt-1"
+                onChange={(e) => setBranches(Number(e.target.value))}
+                // defaultValue={user?.branch?.id}
+              >
+                {branchesOption.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.name}
+                  </option>
+                ))}
+              </Select>
+            </Label>
+
+            <Label className="">
+              <Label className="">
+                <Select
+                  className="mt-1"
+                  onChange={(e) => setRank(Number(e.target.value))}
+                  // defaultValue={user?.rank?.id}
+                >
+                  {rankOptions.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.name}
+                    </option>
+                  ))}
+                </Select>
+              </Label>
+            </Label>
           </div>
         </div>
         <ul className="flex items-center flex-shrink-0 space-x-6">
@@ -84,7 +158,7 @@ function Header() {
             >
               <Avatar
                 className="align-middle"
-                src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
+                src={defaultAvatar.src}
                 alt=""
                 aria-hidden="true"
               />

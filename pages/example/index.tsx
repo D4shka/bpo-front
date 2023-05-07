@@ -1,59 +1,107 @@
 import React, { useState, useEffect } from "react";
-import { Doughnut, Line } from "react-chartjs-2";
 
-import CTA from "example/components/CTA";
-import InfoCard from "example/components/Cards/InfoCard";
-import ChartCard from "example/components/Chart/ChartCard";
-import ChartLegend from "example/components/Chart/ChartLegend";
-import PageTitle from "example/components/Typography/PageTitle";
-import RoundIcon from "example/components/RoundIcon";
-import Layout from "example/containers/Layout";
-import response, { ITableData } from "utils/demo/tableData";
-import { ChatIcon, CartIcon, MoneyIcon, PeopleIcon } from "icons";
+import { useRouter } from "next/router";
 
 import {
-  TableBody,
-  TableContainer,
-  Table,
-  TableHeader,
-  TableCell,
-  TableRow,
-  TableFooter,
-  Avatar,
-  Badge,
-  Pagination,
+  Input,
+  HelperText,
+  Label,
+  Select,
+  Textarea,
+  Button,
 } from "@roketid/windmill-react-ui";
 
-import {
-  doughnutOptions,
-  lineOptions,
-  doughnutLegends,
-  lineLegends,
-} from "utils/demo/chartsData";
+import Layout from "example/containers/Layout";
+import response, { ITableData } from "utils/demo/tableData";
 
-import {
-  Chart,
-  ArcElement,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+interface MyResponse extends Response {
+  accessToken?: string;
+}
 
-function Dashboard() {
-  Chart.register(
-    ArcElement,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-  );
+interface RankOption {
+  id: number;
+  name: string;
+}
+
+interface BranchesOption {
+  id: number;
+  name: string;
+}
+
+function example() {
+  const router = useRouter();
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [rank, setRank] = useState(0);
+  const [branches, setBranches] = useState(0);
+  const [image, setImage] = useState("");
+
+  // const user = localStorage.getItem("user");
+
+  const rankOptions: RankOption[] = [
+    { id: 1, name: "Байлдагч" },
+    { id: 2, name: "Ахлах байлдагч" },
+    { id: 3, name: "Дэд түрүүч" },
+    { id: 4, name: "Түрүүч" },
+    { id: 5, name: "Ахлах түрүүч" },
+    { id: 6, name: "Дэд ахлагч" },
+    { id: 7, name: "Ахлагч" },
+    { id: 8, name: "Ахмад" },
+    { id: 9, name: "Ахлах ахлагч" },
+    { id: 10, name: "Дэслэгч" },
+    { id: 11, name: "Ахлах дэслэгч" },
+    { id: 12, name: "Ахмад" },
+    { id: 13, name: "Хошууч" },
+    { id: 14, name: "Дэд хурандаа" },
+    { id: 15, name: "Хурандаа" },
+  ];
+
+  const branchesOption: BranchesOption[] = [
+    { id: 1, name: "Хилийн застав" },
+    { id: 2, name: "Option 2" },
+    { id: 3, name: "Option 3" },
+    { id: 4, name: "Option 4" },
+  ];
+
+  console.log("rank", rank);
+
+  const updateSoldier = async () => {
+    try {
+      const item = {
+        firstname,
+        lastname,
+        email,
+        rank: {
+          id: rank,
+          name: rankOptions.find((opt) => opt.id === rank)?.name,
+        },
+        branch: {
+          id: branches,
+          name: branchesOption.find((opt) => opt.id === branches)?.name,
+        },
+      };
+
+      fetch(`http://192.168.1.116:8080/api/users/soldiers/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify(item),
+      }).then((res) => {
+        const myRes = res as MyResponse;
+        if (myRes.status === 200) {
+          myRes.json().then((d) => {
+            console.log("d", d);
+            alert("Амжилттай шинчиллээ");
+          });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const [page, setPage] = useState(1);
   const [data, setData] = useState<ITableData[]>([]);
@@ -124,25 +172,102 @@ function Dashboard() {
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
-                    <div className="py-6 px-3 mt-32 sm:mt-0">
-                      <button
-                        className="bg-[#015A02] uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
-                        type="button"
-                      >
-                        Засах
-                      </button>
-                    </div>
+                    <div className="py-6 px-3 mt-32 sm:mt-0 mb-20"></div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-1"></div>
                 </div>
-                <div className="text-center mt-12">
-                  <div className="mb-2 text-blueGray-600">
-                    Овог: Эрдэнэцацрал
-                  </div>
-                  <div className="mb-2 text-blueGray-600">Нэр: Дашням</div>
-                  <div className="mb-2 text-blueGray-600">Цол: Ахлагч</div>
-                  <div className="mb-2 text-blueGray-600">
-                    Цэргийн анги: Хэлийн застав
+                <div className="px-4 py-3 mb-8 ">
+                  <Label>
+                    <span>Овог</span>
+                    <Input
+                      className="mt-1"
+                      placeholder=""
+                      onChange={(e) => setFirstName(e.target.value)}
+                    />
+                  </Label>
+
+                  <Label>
+                    <span>Нэр</span>
+                    <Input
+                      className="mt-1"
+                      placeholder=""
+                      onChange={(e) => setLastName(e.target.value)}
+                      defaultValue={"sdsdsds"}
+                    />
+                  </Label>
+                  <Label>
+                    <span>Имейл</span>
+                    <Input
+                      className="mt-1"
+                      placeholder=""
+                      name="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </Label>
+                  <Label>
+                    <span>Нууц үг</span>
+                    <Input
+                      className="mt-1"
+                      placeholder="********"
+                      name="password"
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </Label>
+
+                  <Label className="mt-4">
+                    <span>Цэргийн анги</span>
+                    <Select
+                      className="mt-1"
+                      onChange={(e) => setBranches(Number(e.target.value))}
+                    >
+                      {branchesOption.map((option) => (
+                        <option key={option.id} value={option.id}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </Select>
+                  </Label>
+
+                  <Label className="mt-4">
+                    <Label className="mt-4">
+                      <span>Цол</span>
+                      <Select
+                        className="mt-1"
+                        onChange={(e) => setRank(Number(e.target.value))}
+                      >
+                        {rankOptions.map((option) => (
+                          <option key={option.id} value={option.id}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </Select>
+                    </Label>
+                  </Label>
+
+                  <Label className="mt-4">
+                    <div className="w-full">
+                      <span>Зураг</span>
+                      <input
+                        className="border border-gray-400 py-2 px-4 w-full rounded-md"
+                        id="image-upload"
+                        type="file"
+                        name="image"
+                        accept="image/*"
+                        onChange={(e) => setImage(e.target.value)}
+                      />
+                    </div>
+                  </Label>
+
+                  <div className="px-6 my-6">
+                    <Button
+                      onClick={updateSoldier}
+                      className="bg-[#015A02] active:bg-[#015A02] hover:bg-[#015A02] focus:ring-[#015A02]"
+                    >
+                      Хадгалах
+                      <span className="ml-2" aria-hidden="true">
+                        +
+                      </span>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -161,4 +286,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default example;

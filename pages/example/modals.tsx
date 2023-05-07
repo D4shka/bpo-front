@@ -30,6 +30,22 @@ interface BranchesOption {
   name: string;
 }
 
+interface ITableData {
+  image: string;
+  firstname: string;
+  lastname: string;
+  id: number;
+  rank: {
+    id: number;
+    name: string;
+  };
+  roles: string;
+  branch: {
+    id: number;
+    name: string;
+  };
+}
+
 function Forms() {
   const router = useRouter();
   const [firstname, setFirstName] = useState("");
@@ -39,7 +55,8 @@ function Forms() {
   const [branches, setBranches] = useState(0);
   const [image, setImage] = useState("");
 
-  // const user = localStorage.getItem("user");
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log("localStorage user", user);
 
   const rankOptions: RankOption[] = [
     { id: 1, name: "Байлдагч" },
@@ -69,24 +86,23 @@ function Forms() {
   console.log("rank", rank);
 
   const updateSoldier = async () => {
+    const id = user.id;
+    console.log("id", id);
     try {
       const item = {
         firstname,
         lastname,
-        email,
         rank: {
           id: rank,
           name: rankOptions.find((opt) => opt.id === rank)?.name,
         },
-        branches: [
-          {
-            id: branches,
-            name: branchesOption.find((opt) => opt.id === branches)?.name,
-          },
-        ],
+        branch: {
+          id: branches,
+          name: branchesOption.find((opt) => opt.id === branches)?.name,
+        },
       };
 
-      fetch(`http://192.168.1.135:8080/api/users/soldiers/${id}`, {
+      fetch(`http://192.168.1.116:8080/api/users/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -126,6 +142,7 @@ function Forms() {
             className="mt-1"
             placeholder=""
             onChange={(e) => setFirstName(e.target.value)}
+            defaultValue={user?.firstname}
           />
         </Label>
 
@@ -135,54 +152,16 @@ function Forms() {
             className="mt-1"
             placeholder=""
             onChange={(e) => setLastName(e.target.value)}
-            defaultValue={"sdsdsds"}
+            defaultValue={user?.lastname}
           />
         </Label>
-        <Label>
-          <span>Имейл</span>
-          <Input
-            className="mt-1"
-            placeholder=""
-            name="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Label>
-
-        {/* <Label className="mt-4">
-          <span>Disabled</span>
-          <Input disabled className="mt-1" placeholder="Jane Doe" />
-        </Label> */}
-
-        {/* <div className="mt-4">
-      
-          <Label>Role</Label>
-          <div className="mt-2">
-            <Label radio>
-              <Input
-                type="radio"
-                value="personal"
-                name="accountType"
-                onChange={(e) => setDegree(e.target.value)}
-              />
-              <span className="ml-2">Admin</span>
-            </Label>
-            <Label className="ml-6" radio>
-              <Input
-                type="radio"
-                value="business"
-                name="accountType"
-                onChange={(e) => setRole(e.target.value)}
-              />
-              <span className="ml-2">user</span>
-            </Label>
-          </div>
-        </div> */}
 
         <Label className="mt-4">
           <span>Цэргийн анги</span>
           <Select
             className="mt-1"
             onChange={(e) => setBranches(Number(e.target.value))}
+            defaultValue={user?.branch?.id}
           >
             {branchesOption.map((option) => (
               <option key={option.id} value={option.id}>
@@ -198,6 +177,7 @@ function Forms() {
             <Select
               className="mt-1"
               onChange={(e) => setRank(Number(e.target.value))}
+              defaultValue={user?.rank?.id}
             >
               {rankOptions.map((option) => (
                 <option key={option.id} value={option.id}>
@@ -221,17 +201,11 @@ function Forms() {
             />
           </div>
         </Label>
-        {/* 
-        <Label className="mt-4">
-          <span>Message</span>
-          <Textarea
-            className="mt-1"
-            rows={3}
-            placeholder="Enter some long form content."
-          />
-        </Label> */}
         <div className="px-6 my-6">
-          <Button onClick={updateSoldier} className="bg-[#015A02]">
+          <Button
+            onClick={updateSoldier}
+            className="bg-[#015A02] active:bg-[#015A02] hover:bg-[#015A02] focus:ring-[#015A02]"
+          >
             Хадгалах
             <span className="ml-2" aria-hidden="true">
               +

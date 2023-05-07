@@ -37,7 +37,7 @@ function LoginPage() {
   const getUsers = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.1.135:8080/api/auth/login"
+        "http://192.168.1.116:8080/api/auth/login"
       );
       // setUsers(response);
       console.log("response", response);
@@ -49,7 +49,7 @@ function LoginPage() {
   const login = async () => {
     try {
       let item = { email, password };
-      fetch(`http://192.168.1.135:8080/api/auth/login`, {
+      fetch(`http://192.168.1.116:8080/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +83,7 @@ function LoginPage() {
       const nextIndex = (index + 1) % images.length;
       setBackground(images[nextIndex] as StaticImageData);
       setIndex(nextIndex);
-    }, 2000);
+    }, 3000);
 
     return () => clearInterval(intervalId);
   }, [index, images]);
@@ -106,9 +106,7 @@ function LoginPage() {
         <div className="flex overflow-y-auto md:flex-row justify-center items-center">
           <main className="flex items-center justify-center p-6 sm:p-12 md:w-1/2 border border-[#ffffff] bg-[#ffffff] bg-opacity-20 rounded-lg mt-[100px]">
             <div className="w-full">
-              <h1 className="mb-4 text-xl font-semibold text-gray-700">
-                Нэвтрэх
-              </h1>
+              <h1 className="mb-4 text-xl font-sans text-gray-700">Нэвтрэх</h1>
 
               <Label>
                 <span>Имейл</span>
@@ -131,7 +129,11 @@ function LoginPage() {
               </Label>
 
               <Link href="" passHref={true}>
-                <Button className="mt-4 bg-[#015A02]" onClick={login} block>
+                <Button
+                  className="mt-4 bg-[#015A02] active:bg-[#015A02] hover:bg-[#015A02] focus:ring-[#015A02]"
+                  onClick={login}
+                  block
+                >
                   Нэвтрэх
                 </Button>
               </Link>

@@ -43,7 +43,7 @@ function SidebarSubmenu({ route, linkClicked }: ISidebarSubmenu) {
         ></span>
       )}
       <button
-        className={`inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800  ${
+        className={`inline-flex items-center justify-between w-full text-sm font-sans transition-colors duration-150   ${
           isDropdownMenuOpen ? " text-gray-800" : ""
         }`}
         onClick={handleDropdownMenuClick}

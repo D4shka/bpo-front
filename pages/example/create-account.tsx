@@ -32,7 +32,7 @@ function CrateAccount() {
           </div>
           <main className="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
             <div className="w-full">
-              <h1 className="mb-4 text-xl font-semibold text-gray-700">
+              <h1 className="mb-4 text-xl font-sans text-gray-700">
                 Create account
               </h1>
               <Label>

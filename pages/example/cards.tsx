@@ -78,15 +78,13 @@ function Forms() {
           id: rank,
           name: rankOptions.find((opt) => opt.id === rank)?.name,
         },
-        branches: [
-          {
-            id: branches,
-            name: branchesOption.find((opt) => opt.id === branches)?.name,
-          },
-        ],
+        branch: {
+          id: branches,
+          name: branchesOption.find((opt) => opt.id === branches)?.name,
+        },
       };
 
-      fetch(`http://192.168.1.135:8080/api/users/soldiers/${id}`, {
+      fetch(`http://192.168.1.116:8080/api/users/soldiers/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -201,7 +199,10 @@ function Forms() {
         </Label>
 
         <div className="px-6 my-6">
-          <Button onClick={updateSoldier} className="bg-[#015A02]">
+          <Button
+            onClick={updateSoldier}
+            className="bg-[#015A02] active:bg-[#015A02] hover:bg-[#015A02] focus:ring-[#015A02]"
+          >
             Хадгалах
             <span className="ml-2" aria-hidden="true">
               +

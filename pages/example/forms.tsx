@@ -71,21 +71,18 @@ function Forms() {
       const item = {
         firstname,
         lastname,
-        email,
         rank: {
           id: rank,
           name: rankOptions.find((opt) => opt.id === rank)?.name,
         },
 
-        branches: [
-          {
-            id: branches,
-            name: branchesOption.find((opt) => opt.id === branches)?.name,
-          },
-        ],
+        branch: {
+          id: branches,
+          name: branchesOption.find((opt) => opt.id === branches)?.name,
+        },
         image,
       };
-      fetch(`http://192.168.1.135:8080/api/users/soldiers`, {
+      fetch(`http://192.168.1.116:8080/api/users/soldiers`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -129,45 +126,6 @@ function Forms() {
             onChange={(e) => setLastName(e.target.value)}
           />
         </Label>
-        <Label>
-          <span>Имейл</span>
-          <Input
-            className="mt-1"
-            placeholder=""
-            name="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Label>
-
-        {/* <Label className="mt-4">
-          <span>Disabled</span>
-          <Input disabled className="mt-1" placeholder="Jane Doe" />
-        </Label> */}
-
-        {/* <div className="mt-4">
-      
-          <Label>Role</Label>
-          <div className="mt-2">
-            <Label radio>
-              <Input
-                type="radio"
-                value="personal"
-                name="accountType"
-                onChange={(e) => setDegree(e.target.value)}
-              />
-              <span className="ml-2">Admin</span>
-            </Label>
-            <Label className="ml-6" radio>
-              <Input
-                type="radio"
-                value="business"
-                name="accountType"
-                onChange={(e) => setRole(e.target.value)}
-              />
-              <span className="ml-2">user</span>
-            </Label>
-          </div>
-        </div> */}
 
         <Label className="mt-4">
           <span>Цэргийн анги</span>
@@ -214,7 +172,10 @@ function Forms() {
         </Label>
 
         <div className="px-6 my-6">
-          <Button onClick={addSoldier} className="bg-[#015A02]">
+          <Button
+            onClick={addSoldier}
+            className="bg-[#015A02] active:bg-[#015A02] hover:bg-[#015A02] focus:ring-[#015A02]"
+          >
             Бүртгэх
             <span className="ml-2" aria-hidden="true">
               +

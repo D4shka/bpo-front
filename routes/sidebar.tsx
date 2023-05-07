@@ -29,7 +29,7 @@ const routes: IRoute[] = [
   {
     path: "/example", // the url
     icon: "HomeIcon", // the component being exported from icons/index.js
-    name: "Profile", // name that appear in Sidebar
+    name: "Profifile", // name that appear in Sidebar
     exact: true,
   },
   {
@@ -55,7 +55,7 @@ const routes: IRoute[] = [
   {
     path: "/example/buttons",
     icon: "ButtonsIcon",
-    name: "Buttons",
+    name: "Нүүр хуудөс",
   },
   {
     path: "/example/tables",

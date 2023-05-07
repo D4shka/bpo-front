@@ -24,7 +24,7 @@ function SidebarContent({ linkClicked }: ISidebarContent) {
     <div className="text-gray-500 ">
       <Link href="/#" passHref>
         <div className="ml-6 py-6">
-          <a className="text-lg font-bold text-gray-800">{appName}</a>
+          <a className="text-lg font-sans text-gray-800">{appName}</a>
         </div>
       </Link>
       <ul>
@@ -39,7 +39,7 @@ function SidebarContent({ linkClicked }: ISidebarContent) {
             <li className="relative px-6 py-3" key={route.name}>
               <Link href={route.path || "#"} scroll={false}>
                 <a
-                  className={`inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 ${
+                  className={`inline-flex items-center w-full text-sm font-sans transition-colors duration-150 hover:text-gray-800 ${
                     routeIsActive(pathname, route) ? " text-gray-800" : ""
                   }`}
                   onClick={linkClicked}

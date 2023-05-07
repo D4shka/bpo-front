@@ -80,16 +80,14 @@ function Forms() {
           name: rankOptions.find((opt) => opt.id === rank)?.name,
         },
 
-        branches: [
-          {
-            id: branches,
-            name: branchesOption.find((opt) => opt.id === branches)?.name,
-          },
-        ],
+        branch: {
+          id: branches,
+          name: branchesOption.find((opt) => opt.id === branches)?.name,
+        },
         image,
         password,
       };
-      fetch(`http://192.168.1.135:8080/api/users`, {
+      fetch(`http://192.168.1.116:8080/api/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -204,7 +202,10 @@ function Forms() {
           />
         </Label> */}
         <div className="px-6 my-6">
-          <Button onClick={addUser} className="bg-[#015A02]">
+          <Button
+            onClick={addUser}
+            className="bg-[#015A02] active:bg-[#015A02] hover:bg-[#015A02] focus:ring-[#015A02]"
+          >
             Бүртгэх
             <span className="ml-2" aria-hidden="true">
               +

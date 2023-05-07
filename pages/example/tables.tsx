@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import PageTitle from "example/components/Typography/PageTitle";
 import SectionTitle from "example/components/Typography/SectionTitle";
 import { useRouter } from "next/router";
+import defaultImg from "../../public/assets/img/defaultAvatar.jpg";
 import Loader from "example/components/Loader/Loader";
 import {
   Table,
@@ -41,12 +42,10 @@ interface ITableData {
     name: string;
   };
   roles: string;
-  branches: [
-    {
-      id: number;
-      name: string;
-    }
-  ];
+  branch: {
+    id: number;
+    name: string;
+  };
 }
 interface Id {
   id: number;
@@ -63,7 +62,7 @@ function Tables() {
 
   const getUsers = async () => {
     const response = await fetch(
-      `http://192.168.1.135:8080/api/users?page=${page}&size=${10}`,
+      `http://192.168.1.116:8080/api/users?page=${page}&size=${10}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +80,7 @@ function Tables() {
   const Delete = async (id: number) => {
     console.log("sdsd");
     try {
-      fetch(`http://192.168.1.135:8080/api/users/${id}`, {
+      fetch(`http://192.168.1.116:8080/api/users/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -148,9 +147,7 @@ function Tables() {
                 </div>
                 <div className="space-y-1">
                   <span className="flex items-center space-x-2">
-                    <span className="">
-                      Цэргийн анги: {user?.branches[0]?.name}
-                    </span>
+                    <span className="">Цэргийн анги: {user?.branch?.name}</span>
                   </span>
                   <span className="flex items-center space-x-2">
                     <span className="">Цол: {user?.rank?.name}</span>
@@ -201,7 +198,7 @@ function Tables() {
                     <div className="flex items-center text-sm">
                       <Avatar
                         className="hidden mr-3 md:block"
-                        src={user.image}
+                        src={user.image || defaultImg.src}
                         alt="User avatar"
                         onClick={openModal}
                       />
@@ -212,7 +209,7 @@ function Tables() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="text-sm">{user?.branches[0]?.name}</span>
+                    <span className="text-sm">{user?.branch?.name}</span>
                   </TableCell>
                   <TableCell>
                     <Badge>{user?.rank?.name}</Badge>

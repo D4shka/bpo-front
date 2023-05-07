@@ -14,7 +14,7 @@ function InfoCard({ title, value, children }: IInfoCard) {
         {children}
         <div>
           <p className="mb-2 text-sm font-medium text-gray-600 ">{title}</p>
-          <p className="text-lg font-semibold text-gray-700">{value}</p>
+          <p className="text-lg font-sans text-gray-700">{value}</p>
         </div>
       </CardBody>
     </Card>

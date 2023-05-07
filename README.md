@@ -1,18 +1,18 @@
 <p align="center">
-    <h1>Windmill Dashboard Next.js Typescript</h1>
-    <a href="https://windmill-dashboard-nextjs-typescript.vercel.app/example">
-      <img alt="Windmill Dashboard React" width="600" src=".github/windmill-dashboard-thumbnail.jpg">
+    <h1>Windmill example Next.js Typescript</h1>
+    <a href="https://windmill-example-nextjs-typescript.vercel.app/example">
+      <img alt="Windmill example React" width="600" src=".github/windmill-example-thumbnail.jpg">
     </a><br>
 </p>
 
-See the [Original Project by @estevanmaito](https://github.com/estevanmaito/windmill-dashboard-react/)
+See the [Original Project by @estevanmaito](https://github.com/estevanmaito/windmill-example-react/)
 
 With help from other contributors :
-- [Typescript version by @neutralboy](https://github.com/neutralboy/windmill-dashboard-react-ts)
-- [Nextjs version by @Aldhanekaa](https://github.com/Aldhanekaa/windmill-dashboard-nextjs)
 
+- [Typescript version by @neutralboy](https://github.com/neutralboy/windmill-example-react-ts)
+- [Nextjs version by @Aldhanekaa](https://github.com/Aldhanekaa/windmill-example-nextjs)
 
-🚀 [See it live](https://windmill-dashboard-nextjs-typescript.vercel.app/example)
+🚀 [See it live](https://windmill-example-nextjs-typescript.vercel.app/example)
 
 This is not a template. This is a complete application, built on top of React, with all tiny details taken care of so you just need to bring the data to feed it.
 
@@ -33,15 +33,16 @@ Accessibility is a priority in my projects and I think it should be in yours too
 
 ### General components
 
-Windmill Dashboard React is built on top of [Windmill React UI](https://windmillui.com/react-ui). You will find the documentation for every small component there.
+Windmill example React is built on top of [Windmill React UI](https://windmillui.com/react-ui). You will find the documentation for every small component there.
 
-### Example Boilerplate
+### example Boilerplate
 
 All components and containers are saved in folder [example](example)
 
 ### Routing
 
 Change default redirecting when hit the `/` or `home` in file [next.config.js](next.config.js)
+
 ```js
   async redirects() {
     return [
@@ -93,6 +94,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Getting Started
 
 First, install dependencies :
+
 ```bash
 npm install
 # or
@@ -129,5 +131,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
 # bpo-front
+
 # bpo-front
