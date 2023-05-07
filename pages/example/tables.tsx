@@ -77,15 +77,16 @@ function Tables() {
   const [page, setPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [id, setId] = useState<any>([]);
-  const [rank, setRank] = useState(0);
-  const [branches, setBranches] = useState(0);
+  const [rankId, setRankId] = useState(0);
+  const [branchId, setBranchId] = useState(0);
+  const [searchPattern, setSearchPattern] = useState("");
 
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<User[]>([]);
 
   const router = useRouter();
 
   const rankOptions: RankOption[] = [
+    { id: 0, name: "Бүгд" },
     { id: 1, name: "Байлдагч" },
     { id: 2, name: "Ахлах байлдагч" },
     { id: 3, name: "Дэд түрүүч" },
@@ -104,15 +105,13 @@ function Tables() {
   ];
 
   const branchesOption: BranchesOption[] = [
+    { id: 0, name: "Бүгд" },
     { id: 1, name: "Хилийн застав" },
-    { id: 2, name: "Option 2" },
-    { id: 3, name: "Option 3" },
-    { id: 4, name: "Option 4" },
   ];
 
   const getUsers = async () => {
     const response = await fetch(
-      `http://192.168.1.116:8080/api/users?page=${page}&size=${10}`,
+      `http://192.168.1.116:8080/api/users?page=${page}&size=${10}&searchPattern=${searchPattern}&rankId=${rankId}&branchId=${branchId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -124,24 +123,6 @@ function Tables() {
     setTotalElements(data.totalElements);
     setUsers(data.content);
   };
-
-  const getSearch = async () => {
-    const response = await fetch(`http://192.168.1.116:8080/api/users`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    });
-    const data = await response.json();
-    const filteredData = data.filter(
-      (user: User) =>
-        user.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.lastname.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setSearchResults(filteredData);
-  };
-
-  console.log("users", users);
 
   const Delete = async (id: number) => {
     console.log("sdsd");
@@ -185,12 +166,12 @@ function Tables() {
 
   useEffect(() => {
     getUsers();
-  }, [page]);
+  }, [page, searchPattern, rankId, branchId]);
 
   return (
     <Layout>
       <div className="grid grid-cols-4">
-        <div className="col-span-2 ">
+        <div className="col-span-2 pt-3">
           <div className="flex justify-center flex-1 lg:mr-32 pt-4">
             <div className="relative w-full max-w-xl mr-1 focus-within:text-purple-500">
               <div className="absolute inset-y-0 flex items-center pl-2">
@@ -203,23 +184,17 @@ function Tables() {
                 className="pl-8 text-gray-700"
                 placeholder="Хайх"
                 aria-label="Search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => setSearchPattern(e.target.value)}
               />
             </div>
-            <Button
-              onClick={getSearch}
-              className="bg-[#015A02] active:bg-[#015A02] hover:bg-[#015A02] focus:ring-[#015A02]"
-            >
-              Search
-            </Button>
           </div>
         </div>
         <div className="col-span-1 ">
-          <Label className="pt-4">
+          <span className="text-[14px]">Цэргийн анги</span>
+          <Label className="pt-1">
             <Select
               className="w-44"
-              onChange={(e) => setBranches(Number(e.target.value))}
+              onChange={(e) => setBranchId(Number(e.target.value))}
             >
               {branchesOption.map((option) => (
                 <option key={option.id} value={option.id}>
@@ -230,11 +205,12 @@ function Tables() {
           </Label>
         </div>
         <div className="col-span-1">
-          <Label className="pt-4">
+          <span className="text-[14px]">Цол</span>
+          <Label className="pt-1">
             <Label className="">
               <Select
                 className="w-44"
-                onChange={(e) => setRank(Number(e.target.value))}
+                onChange={(e) => setRankId(Number(e.target.value))}
               >
                 {rankOptions.map((option) => (
                   <option key={option.id} value={option.id}>

@@ -70,24 +70,23 @@ function LoginPage() {
     }
   };
 
-  const [background, setBackground] =
-    useState<StaticImageData>(backgroundImage);
-  const [images] = useState<(string | StaticImageData)[]>([
-    backgroundImage,
-    introBg2,
-    introBg3,
-  ]);
-  const [index, setIndex] = useState<number>(0);
+  const [background, setBackground] = useState<StaticImageData>(introBg3);
+  // const [images] = useState<(string | StaticImageData)[]>([
+  //   backgroundImage,
+  //   introBg2,
+  //   introBg3,
+  // ]);
+  // const [index, setIndex] = useState<number>(0);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      const nextIndex = (index + 1) % images.length;
-      setBackground(images[nextIndex] as StaticImageData);
-      setIndex(nextIndex);
-    }, 3000);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     const nextIndex = (index + 1) % images.length;
+  //     setBackground(images[nextIndex] as StaticImageData);
+  //     setIndex(nextIndex);
+  //   }, 3000);
 
-    return () => clearInterval(intervalId);
-  }, [index, images]);
+  //   return () => clearInterval(intervalId);
+  // }, [index, images]);
 
   const imgSource =
     mode === "dark"

@@ -33,7 +33,7 @@ function Header() {
   const router = useRouter();
 
   const Profile = () => {
-    router.push("/example/buttons");
+    router.push("/example");
   };
 
   const logout = () => {

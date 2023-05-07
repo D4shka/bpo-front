@@ -36,21 +36,21 @@ const routes: IRoute[] = [
     icon: "FormsIcon",
     name: "Цэрэг нэмэх",
   },
-  {
-    path: "/example/modals",
-    icon: "ModalsIcon",
-    name: "Цэргийн мэдээлэл шинчлэх",
-  },
+  // {
+  //   path: "/example/modals",
+  //   icon: "ModalsIcon",
+  //   name: "Цэргийн мэдээлэл шинэчлэх",
+  // },
   {
     path: "/example/charts",
     icon: "ChartsIcon",
     name: "Хэрэглэгч нэмэх",
   },
-  {
-    path: "/example/cards",
-    icon: "CardsIcon",
-    name: "Хэрэглэгчийн мэдээлэл шинчлэх",
-  },
+  // {
+  //   path: "/example/cards",
+  //   icon: "CardsIcon",
+  //   name: "Хэрэглэгчийн мэдээлэл шинчлэх",
+  // },
   // {
   //   path: "/example/buttons",
   //   icon: "ButtonsIcon",
@@ -61,33 +61,33 @@ const routes: IRoute[] = [
     icon: "TablesIcon",
     name: "Жагсаалт харах",
   },
-  {
-    icon: "PagesIcon",
-    name: "Pages",
-    routes: [
-      // submenu
-      {
-        path: "/example/login",
-        name: "Login",
-      },
-      {
-        path: "/example/create-account",
-        name: "Create account",
-      },
-      {
-        path: "/example/forgot-password",
-        name: "Forgot password",
-      },
-      {
-        path: "/example/404",
-        name: "404",
-      },
-      {
-        path: "/example/blank",
-        name: "Blank",
-      },
-    ],
-  },
+  // {
+  //   icon: "PagesIcon",
+  //   name: "Pages",
+  //   routes: [
+  //     // submenu
+  //     {
+  //       path: "/example/login",
+  //       name: "Login",
+  //     },
+  //     {
+  //       path: "/example/create-account",
+  //       name: "Create account",
+  //     },
+  //     {
+  //       path: "/example/forgot-password",
+  //       name: "Forgot password",
+  //     },
+  //     {
+  //       path: "/example/404",
+  //       name: "404",
+  //     },
+  //     {
+  //       path: "/example/blank",
+  //       name: "Blank",
+  //     },
+  //   ],
+  // },
 ];
 
 export type { IRoute };

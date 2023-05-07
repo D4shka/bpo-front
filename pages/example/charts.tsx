@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -34,15 +34,10 @@ interface BranchesOption {
 
 function Forms() {
   const router = useRouter();
-  const [firstname, setFirstName] = useState("");
-  const [lastname, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [rank, setRank] = useState(0);
-  const [branches, setBranches] = useState(0);
-  const [image, setImage] = useState("");
-  const [password, setPassword] = useState("");
+  const [user, setUser] = useState({});
 
   const rankOptions: RankOption[] = [
+    { id: 0, name: "Сонгох" },
     { id: 1, name: "Байлдагч" },
     { id: 2, name: "Ахлах байлдагч" },
     { id: 3, name: "Дэд түрүүч" },
@@ -61,45 +56,31 @@ function Forms() {
   ];
 
   const branchesOption: BranchesOption[] = [
+    { id: 0, name: "Сонгох" },
     { id: 1, name: "Хилийн застав" },
-    { id: 2, name: "Option 2" },
-    { id: 3, name: "Option 3" },
-    { id: 4, name: "Option 4" },
   ];
 
-  console.log("rank", rank);
+  const handleChange = (e: any) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   const addUser = async () => {
     try {
-      const item = {
-        firstname,
-        lastname,
-        email,
-        rank: {
-          id: rank,
-          name: rankOptions.find((opt) => opt.id === rank)?.name,
-        },
-
-        branch: {
-          id: branches,
-          name: branchesOption.find((opt) => opt.id === branches)?.name,
-        },
-        image,
-        password,
-      };
       fetch(`http://192.168.1.116:8080/api/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-        body: JSON.stringify(item),
+        body: JSON.stringify(user),
       }).then((res) => {
         const myRes = res as MyResponse;
         if (myRes.status === 200) {
-          myRes.json().then((d) => {
-            console.log("d", d);
-          });
+          alert("Амжилттай нэмлээ");
         }
       });
     } catch (error) {
@@ -117,7 +98,8 @@ function Forms() {
           <Input
             className="mt-1"
             placeholder=""
-            onChange={(e) => setFirstName(e.target.value)}
+            name="lastname"
+            onChange={(e) => handleChange(e)}
           />
         </Label>
 
@@ -126,7 +108,8 @@ function Forms() {
           <Input
             className="mt-1"
             placeholder=""
-            onChange={(e) => setLastName(e.target.value)}
+            name="firstname"
+            onChange={(e) => handleChange(e)}
           />
         </Label>
         <Label>
@@ -135,7 +118,7 @@ function Forms() {
             className="mt-1"
             placeholder=""
             name="email"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => handleChange(e)}
           />
         </Label>
 
@@ -144,8 +127,9 @@ function Forms() {
           <Input
             className="mt-1"
             placeholder="********"
+            type="password"
             name="password"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => handleChange(e)}
           />
         </Label>
 
@@ -153,7 +137,8 @@ function Forms() {
           <span>Цэргийн анги</span>
           <Select
             className="mt-1"
-            onChange={(e) => setBranches(Number(e.target.value))}
+            name="branch"
+            onChange={(e) => handleChange(e)}
           >
             {branchesOption.map((option) => (
               <option key={option.id} value={option.id}>
@@ -168,7 +153,8 @@ function Forms() {
             <span>Цол</span>
             <Select
               className="mt-1"
-              onChange={(e) => setRank(Number(e.target.value))}
+              name="rank"
+              onChange={(e) => handleChange(e)}
             >
               {rankOptions.map((option) => (
                 <option key={option.id} value={option.id}>
@@ -188,7 +174,7 @@ function Forms() {
               type="file"
               name="image"
               accept="image/*"
-              onChange={(e) => setImage(e.target.value)}
+              onChange={(e) => handleChange(e)}
             />
           </div>
         </Label>
