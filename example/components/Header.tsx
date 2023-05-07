@@ -1,11 +1,6 @@
 import { useContext, useState } from "react";
 import SidebarContext from "context/SidebarContext";
-import {
-  HelperText,
-  Label,
-  Select,
-  Textarea,
-} from "@roketid/windmill-react-ui";
+
 import {
   SearchIcon,
   MoonIcon,
@@ -28,51 +23,14 @@ import {
 import { useRouter } from "next/router";
 import defaultAvatar from "../../public/assets/img/defaultAvatar.jpg";
 
-interface RankOption {
-  id: number;
-  name: string;
-}
-
-interface BranchesOption {
-  id: number;
-  name: string;
-}
-
 function Header() {
   const { mode, toggleMode } = useContext(WindmillContext);
   const { toggleSidebar } = useContext(SidebarContext);
 
   const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [rank, setRank] = useState(0);
-  const [branches, setBranches] = useState(0);
 
   const router = useRouter();
-
-  const rankOptions: RankOption[] = [
-    { id: 1, name: "Байлдагч" },
-    { id: 2, name: "Ахлах байлдагч" },
-    { id: 3, name: "Дэд түрүүч" },
-    { id: 4, name: "Түрүүч" },
-    { id: 5, name: "Ахлах түрүүч" },
-    { id: 6, name: "Дэд ахлагч" },
-    { id: 7, name: "Ахлагч" },
-    { id: 8, name: "Ахмад" },
-    { id: 9, name: "Ахлах ахлагч" },
-    { id: 10, name: "Дэслэгч" },
-    { id: 11, name: "Ахлах дэслэгч" },
-    { id: 12, name: "Ахмад" },
-    { id: 13, name: "Хошууч" },
-    { id: 14, name: "Дэд хурандаа" },
-    { id: 15, name: "Хурандаа" },
-  ];
-
-  const branchesOption: BranchesOption[] = [
-    { id: 1, name: "Хилийн застав" },
-    { id: 2, name: "Option 2" },
-    { id: 3, name: "Option 3" },
-    { id: 4, name: "Option 4" },
-  ];
 
   const Profile = () => {
     router.push("/example/buttons");
@@ -103,51 +61,7 @@ function Header() {
           <MenuIcon className="w-6 h-6" aria-hidden="true" />
         </button>
         {/* <!-- Search input --> */}
-        <div className="flex justify-center flex-1 lg:mr-32">
-          <div className="relative w-full max-w-xl mr-6 focus-within:text-purple-500">
-            <div className="absolute inset-y-0 flex items-center pl-2">
-              <SearchIcon
-                className="w-4 h-4 text-[#015A02]"
-                aria-hidden="true"
-              />
-            </div>
-            <Input
-              className="pl-8 text-gray-700"
-              placeholder="Хайх"
-              aria-label="Search"
-            />
-
-            <Label className="">
-              <Select
-                className="mt-1"
-                onChange={(e) => setBranches(Number(e.target.value))}
-                // defaultValue={user?.branch?.id}
-              >
-                {branchesOption.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.name}
-                  </option>
-                ))}
-              </Select>
-            </Label>
-
-            <Label className="">
-              <Label className="">
-                <Select
-                  className="mt-1"
-                  onChange={(e) => setRank(Number(e.target.value))}
-                  // defaultValue={user?.rank?.id}
-                >
-                  {rankOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.name}
-                    </option>
-                  ))}
-                </Select>
-              </Label>
-            </Label>
-          </div>
-        </div>
+        <div className="flex justify-center flex-1 lg:mr-32"></div>
         <ul className="flex items-center flex-shrink-0 space-x-6">
           <li className="relative">
             <button

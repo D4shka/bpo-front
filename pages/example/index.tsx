@@ -10,9 +10,26 @@ import {
   Textarea,
   Button,
 } from "@roketid/windmill-react-ui";
+import defaultImg from "../../public/assets/img/defaultAvatar.jpg";
 
 import Layout from "example/containers/Layout";
-import response, { ITableData } from "utils/demo/tableData";
+import response from "utils/demo/tableData";
+
+interface ITableData {
+  image: string;
+  firstname: string;
+  lastname: string;
+  id: number;
+  rank: {
+    id: number;
+    name: string;
+  };
+  roles: string;
+  branch: {
+    id: number;
+    name: string;
+  };
+}
 
 interface MyResponse extends Response {
   accessToken?: string;
@@ -36,6 +53,7 @@ function example() {
   const [rank, setRank] = useState(0);
   const [branches, setBranches] = useState(0);
   const [image, setImage] = useState("");
+  const [userData, setUserData] = useState<any>([]);
 
   // const user = localStorage.getItem("user");
 
@@ -66,7 +84,23 @@ function example() {
 
   console.log("rank", rank);
 
-  const updateSoldier = async () => {
+  const getUser = async () => {
+    const response = await fetch(`http://192.168.1.116:8080/api/users/me`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    const data = await response.json();
+    setUserData(data);
+  };
+  console.log("===>!", userData);
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const profile = async () => {
     try {
       const item = {
         firstname,
@@ -82,7 +116,7 @@ function example() {
         },
       };
 
-      fetch(`http://192.168.1.116:8080/api/users/soldiers/${id}`, {
+      fetch(`http://192.168.1.116:8080/api/users/me`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -166,7 +200,7 @@ function example() {
                     <div className="relative">
                       <img
                         alt="..."
-                        src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
+                        src={userData.image || defaultImg.src}
                         className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
                       />
                     </div>
@@ -183,6 +217,7 @@ function example() {
                       className="mt-1"
                       placeholder=""
                       onChange={(e) => setFirstName(e.target.value)}
+                      defaultValue={userData.firstname}
                     />
                   </Label>
 
@@ -192,7 +227,7 @@ function example() {
                       className="mt-1"
                       placeholder=""
                       onChange={(e) => setLastName(e.target.value)}
-                      defaultValue={"sdsdsds"}
+                      defaultValue={userData?.lastname}
                     />
                   </Label>
                   <Label>
@@ -202,6 +237,7 @@ function example() {
                       placeholder=""
                       name="email"
                       onChange={(e) => setEmail(e.target.value)}
+                      defaultValue={userData?.email}
                     />
                   </Label>
                   <Label>
@@ -214,7 +250,7 @@ function example() {
                     />
                   </Label>
 
-                  <Label className="mt-4">
+                  {/* <Label className="mt-4">
                     <span>Цэргийн анги</span>
                     <Select
                       className="mt-1"
@@ -226,9 +262,9 @@ function example() {
                         </option>
                       ))}
                     </Select>
-                  </Label>
+                  </Label> */}
 
-                  <Label className="mt-4">
+                  {/* <Label className="mt-4">
                     <Label className="mt-4">
                       <span>Цол</span>
                       <Select
@@ -242,7 +278,7 @@ function example() {
                         ))}
                       </Select>
                     </Label>
-                  </Label>
+                  </Label> */}
 
                   <Label className="mt-4">
                     <div className="w-full">
@@ -260,7 +296,7 @@ function example() {
 
                   <div className="px-6 my-6">
                     <Button
-                      onClick={updateSoldier}
+                      onClick={profile}
                       className="bg-[#015A02] active:bg-[#015A02] hover:bg-[#015A02] focus:ring-[#015A02]"
                     >
                       Хадгалах

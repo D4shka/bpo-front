@@ -59,6 +59,7 @@ function LoginPage() {
         const myRes = res as MyResponse;
         if (myRes.status === 200) {
           myRes.json().then((d) => {
+            console.log("res", res);
             localStorage.setItem("accessToken", d.accessToken);
             router.push("/example");
           });

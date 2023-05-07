@@ -26,12 +26,11 @@ export function routeIsActive(pathname: String, route: IRoute): boolean {
 }
 
 const routes: IRoute[] = [
-  {
-    path: "/example", // the url
-    icon: "HomeIcon", // the component being exported from icons/index.js
-    name: "Profifile", // name that appear in Sidebar
-    exact: true,
-  },
+  // {
+  //   path: "/example",
+  //   icon: "HomeIcon",
+  //   name: "Нүүр хуудас",
+  // },
   {
     path: "/example/forms",
     icon: "FormsIcon",
@@ -52,11 +51,11 @@ const routes: IRoute[] = [
     icon: "CardsIcon",
     name: "Хэрэглэгчийн мэдээлэл шинчлэх",
   },
-  {
-    path: "/example/buttons",
-    icon: "ButtonsIcon",
-    name: "Нүүр хуудөс",
-  },
+  // {
+  //   path: "/example/buttons",
+  //   icon: "ButtonsIcon",
+  //   name: "Нүүр хуудөс",
+  // },
   {
     path: "/example/tables",
     icon: "TablesIcon",

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import defaultImg from "../../public/assets/img/defaultAvatar.jpg";
 
 import {
   Input,
@@ -113,7 +114,8 @@ function Forms() {
         <div className="flex justify-center items-center">
           <img
             className="rounded-full w-36 h-36"
-            src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
+            src={defaultImg.src}
+            // src={user.image || defaultImg.src}
             alt="Extra large avatar"
           />
         </div>

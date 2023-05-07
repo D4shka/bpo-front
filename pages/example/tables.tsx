@@ -5,6 +5,8 @@ import SectionTitle from "example/components/Typography/SectionTitle";
 import { useRouter } from "next/router";
 import defaultImg from "../../public/assets/img/defaultAvatar.jpg";
 import Loader from "example/components/Loader/Loader";
+import { Input } from "@roketid/windmill-react-ui";
+import { SearchIcon } from "icons";
 import {
   Table,
   TableHeader,
@@ -25,6 +27,8 @@ import {
   ModalFooter,
 } from "@roketid/windmill-react-ui";
 import { EditIcon, TrashIcon } from "icons";
+
+import { Label, Select } from "@roketid/windmill-react-ui";
 
 import Layout from "example/containers/Layout";
 
@@ -51,14 +55,60 @@ interface Id {
   id: number;
 }
 
+interface RankOption {
+  id: number;
+  name: string;
+}
+
+interface BranchesOption {
+  id: number;
+  name: string;
+}
+
+interface User {
+  firstname: string;
+  lastname: string;
+  id: number;
+}
+
 function Tables() {
   const [users, setUsers] = useState<ITableData[]>([]);
   const [totalElements, setTotalElements] = useState(0);
   const [page, setPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [id, setId] = useState<any>([]);
+  const [rank, setRank] = useState(0);
+  const [branches, setBranches] = useState(0);
+
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<User[]>([]);
 
   const router = useRouter();
+
+  const rankOptions: RankOption[] = [
+    { id: 1, name: "Байлдагч" },
+    { id: 2, name: "Ахлах байлдагч" },
+    { id: 3, name: "Дэд түрүүч" },
+    { id: 4, name: "Түрүүч" },
+    { id: 5, name: "Ахлах түрүүч" },
+    { id: 6, name: "Дэд ахлагч" },
+    { id: 7, name: "Ахлагч" },
+    { id: 8, name: "Ахмад" },
+    { id: 9, name: "Ахлах ахлагч" },
+    { id: 10, name: "Дэслэгч" },
+    { id: 11, name: "Ахлах дэслэгч" },
+    { id: 12, name: "Ахмад" },
+    { id: 13, name: "Хошууч" },
+    { id: 14, name: "Дэд хурандаа" },
+    { id: 15, name: "Хурандаа" },
+  ];
+
+  const branchesOption: BranchesOption[] = [
+    { id: 1, name: "Хилийн застав" },
+    { id: 2, name: "Option 2" },
+    { id: 3, name: "Option 3" },
+    { id: 4, name: "Option 4" },
+  ];
 
   const getUsers = async () => {
     const response = await fetch(
@@ -75,13 +125,29 @@ function Tables() {
     setUsers(data.content);
   };
 
+  const getSearch = async () => {
+    const response = await fetch(`http://192.168.1.116:8080/api/users`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    const data = await response.json();
+    const filteredData = data.filter(
+      (user: User) =>
+        user.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.lastname.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setSearchResults(filteredData);
+  };
+
   console.log("users", users);
 
   const Delete = async (id: number) => {
     console.log("sdsd");
     try {
       fetch(`http://192.168.1.116:8080/api/users/${id}`, {
-        method: "DELETE",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -123,6 +189,72 @@ function Tables() {
 
   return (
     <Layout>
+      <div className="grid grid-cols-4">
+        <div className="col-span-2 ">
+          <div className="flex justify-center flex-1 lg:mr-32 pt-4">
+            <div className="relative w-full max-w-xl mr-1 focus-within:text-purple-500">
+              <div className="absolute inset-y-0 flex items-center pl-2">
+                <SearchIcon
+                  className="w-4 h-4 text-[#015A02]"
+                  aria-hidden="true"
+                />
+              </div>
+              <Input
+                className="pl-8 text-gray-700"
+                placeholder="Хайх"
+                aria-label="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <Button
+              onClick={getSearch}
+              className="bg-[#015A02] active:bg-[#015A02] hover:bg-[#015A02] focus:ring-[#015A02]"
+            >
+              Search
+            </Button>
+          </div>
+        </div>
+        <div className="col-span-1 ">
+          <Label className="pt-4">
+            <Select
+              className="w-44"
+              onChange={(e) => setBranches(Number(e.target.value))}
+            >
+              {branchesOption.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </Select>
+          </Label>
+        </div>
+        <div className="col-span-1">
+          <Label className="pt-4">
+            <Label className="">
+              <Select
+                className="w-44"
+                onChange={(e) => setRank(Number(e.target.value))}
+              >
+                {rankOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.name}
+                  </option>
+                ))}
+              </Select>
+            </Label>
+          </Label>
+        </div>
+      </div>
+      <div className="grid grid-rows-4 grid-flow-col gap-4">
+        {searchResults.map((user) => (
+          <div key={user.id}>
+            <p>
+              {user.firstname} {user.lastname}
+            </p>
+          </div>
+        ))}
+      </div>
       {/* <Loader /> */}
       {users.map((user, i) => (
         <Modal isOpen={isModalOpen} onClose={closeModal}>
@@ -156,6 +288,7 @@ function Tables() {
               </div>
             </div>
           </ModalBody>
+
           <ModalFooter>
             <div className="hidden sm:block">
               <Button layout="outline" onClick={closeModal}>
@@ -212,13 +345,15 @@ function Tables() {
                     <span className="text-sm">{user?.branch?.name}</span>
                   </TableCell>
                   <TableCell>
-                    <Badge>{user?.rank?.name}</Badge>
+                    <Badge className="text-white bg-[#015A02] dark:bg-[#015A02]">
+                      {user?.rank?.name}
+                    </Badge>
                   </TableCell>
                   {/* <TableCell>
-                  <span className="text-sm">
-                    {new Date(user.createdDate).toLocaleDateString()}
-                  </span>
-                </TableCell> */}
+                    <span className="text-sm">
+                      {new Date(user.createdDate).toLocaleDateString()}
+                    </span>
+                  </TableCell> */}
                   <TableCell>
                     <div className="flex items-center space-x-4">
                       <Button
