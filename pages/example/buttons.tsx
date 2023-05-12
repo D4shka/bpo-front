@@ -84,7 +84,7 @@ function example() {
   console.log("rank", rank);
 
   const getUser = async () => {
-    const response = await fetch(`http://192.168.1.116:8080/api/users/me`, {
+    const response = await fetch(`http://192.168.1.167:8080/api/users/me`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -115,7 +115,7 @@ function example() {
         },
       };
 
-      fetch(`http://192.168.1.116:8080/api/users/me`, {
+      fetch(`http://192.168.1.167:8080/api/users/me`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

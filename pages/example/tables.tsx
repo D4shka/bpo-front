@@ -111,7 +111,7 @@ function Tables() {
 
   const getUsers = async () => {
     const response = await fetch(
-      `http://192.168.1.116:8080/api/users?page=${page}&size=${10}&searchPattern=${searchPattern}&rankId=${rankId}&branchId=${branchId}`,
+      `http://192.168.1.167:8080/api/users?page=${page}&size=${10}&searchPattern=${searchPattern}&rankId=${rankId}&branchId${branchId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -127,7 +127,7 @@ function Tables() {
   const Delete = async (id: number) => {
     console.log("sdsd");
     try {
-      fetch(`http://192.168.1.116:8080/api/users/${id}`, {
+      fetch(`http://192.168.1.167:8080/api/users/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -167,6 +167,10 @@ function Tables() {
   useEffect(() => {
     getUsers();
   }, [page, searchPattern, rankId, branchId]);
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
     <Layout>

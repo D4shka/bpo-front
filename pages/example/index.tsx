@@ -89,7 +89,7 @@ function example() {
   console.log("rank", rank);
 
   const getUser = async () => {
-    const response = await fetch(`http://192.168.1.116:8080/api/users/me`, {
+    const response = await fetch(`http://192.168.1.167:8080/api/users/me`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -116,8 +116,22 @@ function example() {
 
   const profile = async () => {
     try {
-      fetch(`http://192.168.1.116:8080/api/users/${userData.id}/update`, {
-        method: "POST",
+      const item = {
+        firstname,
+        lastname,
+        email,
+        rank: {
+          id: rank,
+          name: rankOptions.find((opt) => opt.id === rank)?.name,
+        },
+        branch: {
+          id: branches,
+          name: branchesOption.find((opt) => opt.id === branches)?.name,
+        },
+      };
+
+      fetch(`http://192.168.1.167:8080/api/users/me`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -165,7 +179,7 @@ function example() {
       body: formdata,
     };
 
-    fetch("http://192.168.1.116:8080/api/files", requestOptions)
+    fetch("http://192.168.1.167:8080/api/files", requestOptions)
       .then((response) => response.text())
       .then((result) => console.log("result", result))
       .catch((error) => console.log("error", error));
@@ -253,7 +267,7 @@ function example() {
                                 src={
                                   images[0]
                                     ? images[images.length - 1]["data_url"]
-                                    : `http://192.168.1.116:8080/profile/${image}`
+                                    : `http://192.168.1.167:8080/profile/${image}`
                                 }
                                 className="rounded-full align-middle border-none w-32 h-32"
                               />

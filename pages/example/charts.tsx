@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import Loader from "example/components/Loader/Loader";
-
 import {
   Input,
   HelperText,
@@ -11,12 +9,9 @@ import {
   Select,
   Textarea,
 } from "@roketid/windmill-react-ui";
-import CTA from "example/components/CTA";
-import PageTitle from "example/components/Typography/PageTitle";
 import SectionTitle from "example/components/Typography/SectionTitle";
 
 import Layout from "example/containers/Layout";
-import { MailIcon } from "icons";
 import { Button } from "@roketid/windmill-react-ui";
 interface MyResponse extends Response {
   accessToken?: string;
@@ -55,6 +50,17 @@ function Forms() {
     { id: 15, name: "Хурандаа" },
   ];
 
+  const nameRegex = /^[A-Za-zА-Яа-яөүӨҮёЁ. -]*$/;
+  const emailRegex =
+    /(?:[a-z0-9!#$%&'+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+
+  const [regexErrors, setRegexErrors] = useState({
+    firstname: false,
+    lastname: false,
+    password: false,
+    email: false,
+  });
+
   const branchesOption: BranchesOption[] = [
     { id: 0, name: "Сонгох" },
     { id: 1, name: "Хилийн застав" },
@@ -62,14 +68,63 @@ function Forms() {
 
   const handleChange = (e: any) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+    switch (e.target.name) {
+      case "firstname":
+        if (nameRegex.test(e.target.value) && e.target.value !== "")
+          setRegexErrors({ ...regexErrors, [e.target.name]: true });
+        else setRegexErrors({ ...regexErrors, [e.target.name]: false });
+        // toast.notify("Invalid name", {
+        //   type: "error",
+        // });
+        break;
+      case "lastname":
+        if (nameRegex.test(e.target.value) && e.target.value !== "")
+          setRegexErrors({ ...regexErrors, [e.target.name]: true });
+        else setRegexErrors({ ...regexErrors, [e.target.name]: false });
+        break;
+      case "email":
+        console.log("EMAIL", e.target.value);
+        if (emailRegex.test(e.target.value) && e.target.value !== "")
+          setRegexErrors({ ...regexErrors, [e.target.name]: true });
+        else setRegexErrors({ ...regexErrors, [e.target.name]: false });
+        break;
+      case "password":
+        if (nameRegex.test(e.target.value) && e.target.value !== "")
+          setRegexErrors({ ...regexErrors, [e.target.name]: true });
+        else setRegexErrors({ ...regexErrors, [e.target.name]: false });
+        break;
+      case "":
+        if (nameRegex.test(e.target.value) && e.target.value !== "")
+          setRegexErrors({ ...regexErrors, [e.target.name]: true });
+        else setRegexErrors({ ...regexErrors, [e.target.name]: false });
+        break;
+      case "":
+        if (nameRegex.test(e.target.value) && e.target.value !== "")
+          setRegexErrors({ ...regexErrors, [e.target.name]: true });
+        else setRegexErrors({ ...regexErrors, [e.target.name]: false });
+        break;
+      default:
+    }
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+  // try {
+  //   const nameRegex = /([A-Za-zА-Яа-яөүӨҮёЁ. -]+)/;
+  //   if (!nameRegex.test(firstname) || !nameRegex.test(lastname)) {
+  //
+  // setRegexErrors({ ...regexErrors, [e.target.name]: true });
+  // else setRegexErrors({ ...regexErrors, [e.target.name]: false });
+  //     return;
+  //   }
 
   const addUser = async () => {
+    let pass = true;
     try {
+      (Object.keys(regexErrors) as (keyof typeof regexErrors)[]).forEach(
+        (key) => {
+          if (!regexErrors[key]) pass = false;
+        }
+      );
+      if (!pass) return;
       fetch(`http://192.168.1.116:8080/api/users`, {
         method: "POST",
         headers: {
@@ -98,6 +153,8 @@ function Forms() {
           <Input
             className="mt-1"
             placeholder=""
+            valid={regexErrors.lastname}
+            style={{ color: regexErrors.lastname ? "black" : "red" }}
             name="lastname"
             onChange={(e) => handleChange(e)}
           />
@@ -108,6 +165,8 @@ function Forms() {
           <Input
             className="mt-1"
             placeholder=""
+            valid={regexErrors.firstname}
+            style={{ color: regexErrors.firstname ? "black" : "red" }}
             name="firstname"
             onChange={(e) => handleChange(e)}
           />
@@ -117,6 +176,8 @@ function Forms() {
           <Input
             className="mt-1"
             placeholder=""
+            valid={regexErrors.email}
+            style={{ color: regexErrors.email ? "black" : "red" }}
             name="email"
             onChange={(e) => handleChange(e)}
           />
@@ -127,6 +188,8 @@ function Forms() {
           <Input
             className="mt-1"
             placeholder="********"
+            valid={regexErrors.password}
+            style={{ color: regexErrors.password ? "black" : "red" }}
             type="password"
             name="password"
             onChange={(e) => handleChange(e)}

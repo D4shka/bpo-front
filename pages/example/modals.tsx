@@ -96,8 +96,21 @@ function Forms() {
     const id = user.id;
     console.log("id", id);
     try {
-      fetch(`http://192.168.1.116:8080/api/users/${id}/update`, {
-        method: "POST",
+      const item = {
+        firstname,
+        lastname,
+        rank: {
+          id: rank,
+          name: rankOptions.find((opt) => opt.id === rank)?.name,
+        },
+        branch: {
+          id: branches,
+          name: branchesOption.find((opt) => opt.id === branches)?.name,
+        },
+      };
+
+      fetch(`http://192.168.1.167:8080/api/users/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,

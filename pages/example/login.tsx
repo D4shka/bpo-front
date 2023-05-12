@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 interface User {
   firstName: string;
@@ -25,6 +27,7 @@ import { GithubIcon, TwitterIcon } from "icons";
 import backgroundImage from "../../public/assets/img/backgroundImage.jpeg";
 import introBg2 from "../../public/assets/img/introBg2.jpeg";
 import introBg3 from "../../public/assets/img/introBg3.jpg";
+import { toast } from "react-toastify";
 
 function LoginPage() {
   const { mode } = useContext(WindmillContext);
@@ -34,10 +37,14 @@ function LoginPage() {
   const [data, setData] = useState([]);
   const [user, setUsers] = useState([]);
 
+  useEffect(() => {
+    toast.success("This is a success toast!");
+  }, []);
+
   const getUsers = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.1.116:8080/api/auth/login"
+        "http://192.168.1.167:8080/api/auth/login"
       );
       // setUsers(response);
       console.log("response", response);
@@ -49,22 +56,60 @@ function LoginPage() {
   const login = async () => {
     try {
       let item = { email, password };
-      fetch(`http://192.168.1.116:8080/api/auth/login`, {
+
+      const emailRegex =
+        /(?:[a-z0-9!#$%&'+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+
+      if (!emailRegex.test(email)) {
+        console.log("Invalid email format");
+        return;
+      }
+
+      const passwordRegexList = [
+        { pattern: /.*[0-9].*/, message: "Password must contain one digit." },
+        {
+          pattern: /.*\S+$.*/,
+          message: "Password must contain no whitespace.",
+        },
+        {
+          pattern: /.*\W.*/,
+          message: "Password must contain one special character.",
+        },
+        {
+          pattern: /^.{6,30}$/,
+          message: "Password must be between 6 and 30 characters.",
+        },
+      ];
+
+      let isValidPassword = true;
+      for (const { pattern, message } of passwordRegexList) {
+        if (!pattern.test(password)) {
+          toast.error(message);
+          console.log(message);
+          isValidPassword = false;
+          break;
+        }
+      }
+
+      if (!isValidPassword) {
+        return;
+      }
+
+      const response = await fetch(`http://192.168.1.167:8080/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(item),
-      }).then((res) => {
-        const myRes = res as MyResponse;
-        if (myRes.status === 200) {
-          myRes.json().then((d) => {
-            console.log("res", res);
-            localStorage.setItem("accessToken", d.accessToken);
-            router.push("/example");
-          });
-        }
       });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        toast.success("Login successful!");
+        console.log("res", response);
+        localStorage.setItem("accessToken", data.accessToken);
+        router.push("/example");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -102,6 +147,7 @@ function LoginPage() {
         position: "absolute",
       }}
     >
+      <ToastContainer />
       <div className="flex-1 h-full max-w-4xl mx-auto overflow-hidden">
         <div className="flex overflow-y-auto md:flex-row justify-center items-center">
           <main className="flex items-center justify-center p-6 sm:p-12 md:w-1/2 border border-[#ffffff] bg-[#ffffff] bg-opacity-20 rounded-lg mt-[100px]">

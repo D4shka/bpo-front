@@ -68,7 +68,27 @@ function Forms() {
 
   const addSoldier = async () => {
     try {
-      fetch(`http://192.168.1.116:8080/api/users/soldiers`, {
+      const item = {
+        firstname,
+        lastname,
+        rank: {
+          id: rank,
+          name: rankOptions.find((opt) => opt.id === rank)?.name,
+        },
+        branch: {
+          id: branches,
+          name: branchesOption.find((opt) => opt.id === branches)?.name,
+        },
+        image,
+      };
+
+      const nameRegex = /([A-Za-zА-Яа-яөүӨҮёЁ. -]+)/;
+      if (!nameRegex.test(firstname) || !nameRegex.test(lastname)) {
+        console.log("Invalid name format");
+        return;
+      }
+
+      fetch(`http://192.168.1.167:8080/api/users/soldiers`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

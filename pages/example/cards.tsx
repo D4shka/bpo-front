@@ -85,7 +85,7 @@ function Forms() {
         },
       };
 
-      fetch(`http://192.168.1.116:8080/api/users/soldiers/${id}`, {
+      fetch(`http://192.168.1.167:8080/api/users/soldiers/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
